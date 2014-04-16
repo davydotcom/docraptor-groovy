@@ -1,0 +1,93 @@
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'bintray'
+
+group = 'com.bertramlabs.plugins'
+version = '0.1.0'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3"
+    }
+}
+
+
+repositories {
+    jcenter()
+	mavenCentral()
+}
+
+dependencies {
+	compile 'org.codehaus.groovy:groovy-all:2.2.0'
+	compile 'org.apache.ant:ant:1.7.0'	
+	compile 'log4j:log4j:1.2.16'
+    compile "org.spockframework:spock-core:0.7-groovy-2.0"
+    compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId 'docraptor'
+
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+        }
+    }
+}
+
+sourceSets {
+    main.groovy.srcDir 'src'
+    test.groovy.srcDir 'test'
+}
+
+//Define bintrayUser and bintrayKey in ~/.gradle/gradle.properties
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    publications = ['maven']
+    pkg {
+        repo = 'docraptor'
+        userOrg = 'docraptor'
+        name = 'docraptor-groovy'
+        licenses = ['Apache-2.0']
+    }
+}
+
+groovydoc {
+    source = 'src/main/groovy'
+    footer = "DocRaptor Groovy is Licensed under the APACHE 2 License"
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from 'build/docs/javadoc'
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task(console, dependsOn: 'classes', type: JavaExec) {
+  main = 'groovy.ui.Console'
+  classpath = sourceSets.main.runtimeClasspath
+}
+
+test {
+    testLogging {
+        exceptionFormat = 'full'
+        showStandardStreams = true
+    }
+}
+
+
+bintrayUpload.dependsOn build, sourcesJar, javadocJar
