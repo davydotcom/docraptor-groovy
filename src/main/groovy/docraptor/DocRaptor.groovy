@@ -17,7 +17,7 @@ class DocRaptor {
 
 	def apiKey
 	def requestOptions = [
-	 tag: 'Grails',
+	 tag: null,
 	 documentType: 'pdf',
 	 name: null,
 	 test: false,
