@@ -1,6 +1,6 @@
 # DocRaptor Groovy
 
-This plugin provides a `docraptor.DocRaptor` class for generating PDFs via the [DocRaptor.com](www.docraptor.com) api.
+This plugin provides a `docraptor.DocRaptor` class for generating PDFs via the [DocRaptor.com](http://www.docraptor.com) api.
 
 ## Usage
 
