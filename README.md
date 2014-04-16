@@ -1,6 +1,7 @@
 # DocRaptor Groovy
 
 This plugin provides a `docraptor.DocRaptor` class for generating PDFs via the [DocRaptor.com](http://www.docraptor.com) api.
+Convert any HTML formatted document to PDF or XLS!
 
 ## Usage
 
